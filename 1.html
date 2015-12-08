@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html ng-app="appModule">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="bootstrap.css"/>
+</head>
+<body>
+<div class="container" ng-controller="carCtrl">
+    <table class="table-bordered table">
+        <tr>
+            <td>名称</td>
+            <td>数量</td>
+            <td>价格</td>
+            <td>总价</td>
+            <td>删除</td>
+        </tr>
+        <tr ng-repeat="item in items">
+            <td>{{item.name}}</td>
+            <td><input type="text" ng-model="item.count" ng-change="change()"/></td>
+            <td>{{item.price}}</td>
+            <td>{{item.count*item.price}}</td>
+            <td>
+                <button class="btn btn-danger" ng-click="del($index)">删除</button>
+            </td>
+        </tr>
+    </table>
+    <div  ng-controller="deCtrl">
+        <table class="table-bordered table">
+            <tr>
+                <td>总金额 <input type="text" ng-model="total" ng-change="change()"/></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+<script src="angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller('carCtrl', function ($scope) {
+        $scope.items = [
+            {
+                name: '孙悟空',
+                price: 10,
+                count: 4,
+            },
+        ]
+        $scope.del= function (index) {
+            $scope.items.splice(index,1);
+        }
+        $scope.change= function () {
+            console.log(100);
+            $scope.$broadcast('total',total());
+        }
+        function total(){
+            var total = 0;
+            $scope.items.forEach(function (item) {
+                total+= parseInt(item.price)*item.count;
+            })
+            return total
+        }
+        $scope.$on('changeTotal', function (event , data) {
+            $scope.items[0].count= data/10;
+        })
+    });
+    app.controller('deCtrl', function ($scope) {
+        $scope.total=1000;
+        $scope.$on('total', function (event , data) {
+            $scope.total= data;
+        })
+        $scope.change= function () {
+            console.log(1000);
+            $scope.$emit('changeTotal',$scope.total)
+        }
+
+
+    })
+</script>
+</html>
