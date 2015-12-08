@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<a href="" ui-sref="home({id:1})">home</a>
+<a href="" ui-sref="list">list</a>
+
+<div ui-view></div>
+<script src="angular.js"></script>
+<script src="angular-ui-router.js"></script>
+<script>
+    var myApp = angular.module('myApp', ['ui.router']);
+    myApp.run(function ($rootScope) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            console.log(fromParams);
+        })
+    })
+    myApp.config(function ($stateProvider) {
+        $stateProvider.state('home',{
+            url:'/home/:id',
+            templateUrl:'2.html',
+            controller:'homeCtrl'
+        }).state('list',{
+            url:'/list',
+            templateUrl:'3.html',
+            controller:'listCtrl'
+        }).state('home.home1',{
+            url:'/home1',
+            templateUrl:'4.html',
+        }).state('home.home2',{
+            url:'/home2',
+            templateUrl:'5.html',
+        })
+    });
+    myApp.controller('homeCtrl',function ($scope) {
+        $scope.name='fdl1'
+    })
+    myApp.controller('listCtrl',function ($scope) {
+        $scope.name='fdl2'
+    })
+</script>
+</body>
+</html>
